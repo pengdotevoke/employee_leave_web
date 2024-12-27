@@ -1,0 +1,72 @@
+<odoo>
+    <template id="leave_form" name="Leave Application Form">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <h1 class="text-center mb-4">Apply for Leave</h1>
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <form action="/leave/submit" method="post" enctype="multipart/form-data" class="p-4 border rounded shadow">
+                            <!-- Employee ID -->
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                            <div class="mb-3">
+                                <label for="employee_id" class="form-label">National ID Number:</label>
+                                <input type="text" name="employee_id" class="form-control" placeholder="Enter your Employee ID" required="required" />
+                            </div>
+                            
+                            <!-- Leave Type -->
+                            <div class="mb-3">
+                                <label for="leave_type_id" class="form-label">Leave Type:</label>
+                                <select name="leave_type_id" class="form-select" required="required">
+                                    <option value="" disabled="disabled" selected="selected">Select leave type</option>
+                                    <t t-foreach="request.env['hr.leave.type'].sudo().search([])" t-as="leave_type">
+                                        <option t-att-value="leave_type.id">
+                                            <t t-esc="leave_type.name" />
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                            
+                            <!-- Start Date -->
+                            <div class="mb-3">
+                                <label for="date_from" class="form-label">Start Date:</label>
+                                <input type="date" name="date_from" class="form-control" required="required" />
+                            </div>
+                            
+                            <!-- End Date -->
+                            <div class="mb-3">
+                                <label for="date_to" class="form-label">End Date:</label>
+                                <input type="date" name="date_to" class="form-control" required="required" />
+                            </div>
+                            
+                            <!-- Reason -->
+                            <div class="mb-3">
+                                <label for="reason" class="form-label">Reason:</label>
+                                <textarea name="reason" class="form-control" rows="3" placeholder="Enter the reason for your leave"></textarea>
+                            </div>
+                            
+                            <!-- Attachment -->
+                            <div class="mb-3">
+                                <label for="attachment" class="form-label">Attachment (Study Leave and Sick Leave):</label>
+                                <input type="file" name="attachment" class="form-control" />
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary w-100">Submit Application</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="leave_success" name="Leave Application Success">
+        <t t-call="website.layout">
+            <div class="container">
+                <h1>Leave Application Submitted</h1>
+                <p>Your leave application has been submitted successfully.</p>
+            </div>
+        </t>
+    </template>
+</odoo>
